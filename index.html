@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Robot Fight</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        .arena {
+            width: 800px;
+            height: 400px;
+            margin: 50px auto;
+            position: relative;
+            border: 1px solid #000;
+        }
+
+        .robot {
+            width: 100px; /* Adjust size as needed */
+            height: auto; /* Maintain aspect ratio */
+            position: absolute;
+        }
+
+        #robot1 {
+            left: 50px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        #robot2 {
+            right: 50px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+    </style>
+</head>
+<body>
+    <div class="arena">
+        <img class="robot" id="robot1" src="https://cdn.pixabay.com/photo/2018/05/18/14/48/robot-3412179_960_720.png" alt="Robot 1">
+        <img class="robot" id="robot2" src="https://cdn.pixabay.com/photo/2018/05/18/14/48/robot-3412179_960_720.png" alt="Robot 2">
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const arena = document.querySelector('.arena');
+            const robot1 = document.getElementById('robot1');
+            const robot2 = document.getElementById('robot2');
+
+            let robot1Left = 50;
+            let robot2Left = arena.offsetWidth - 150; // Adjust based on image width
+            let robot1Speed = 2;
+            let robot2Speed = 2;
+
+            function moveRobots() {
+                robot1Left += robot1Speed;
+                robot2Left -= robot2Speed;
+
+                robot1.style.left = robot1Left + 'px';
+                robot2.style.left = robot2Left + 'px';
+
+                if (robot1Left >= robot2Left) {
+                    fight();
+                }
+
+                if (robot1Left >= arena.offsetWidth - 100) { // Adjust based on image width
+                    clearInterval(moveInterval);
+                    clearInterval(fightInterval);
+                    alert("Robot 1 wins!");
+                }
+
+                if (robot2Left <= 50) {
+                    clearInterval(moveInterval);
+                    clearInterval(fightInterval);
+                    alert("Robot 2 wins!");
+                }
+            }
+
+            function fight() {
+                clearInterval(moveInterval); // Stop moving the robots
+                clearInterval(fightInterval); // Prevent multiple fights
+                robot1.style.backgroundColor = 'green';
+                robot2.style.backgroundColor = 'green';
+                setTimeout(() => {
+                    robot1.style.backgroundColor = '';
+                    robot2.style.backgroundColor = '';
+                    moveInterval = setInterval(moveRobots, 10); // Resume moving the robots
+                }, 1000); // Fight lasts for 1 second
+            }
+
+            let moveInterval = setInterval(moveRobots, 10);
+        });
+    </script>
+</body>
+</html>
